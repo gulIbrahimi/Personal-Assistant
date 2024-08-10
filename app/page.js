@@ -26,7 +26,7 @@ export default function Home() {
       // The assistant will be the first to send a message
       role: 'assistant',
       // The content of the message
-      content: "Hi! I'm the Headstarter support assistant. How can I help you today?",
+      content: "Hi! I'm you personal assistant. How can I help you today?",
     },
   ]);
 
@@ -51,13 +51,15 @@ export default function Home() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ data: { prompt: 'You are an artist.' } }),
+          body: JSON.stringify({ data: { prompt: `The user asked: "${message}". Provide a detailed and informative response.` } }),
         });
-    
+        //const prompt = `The user asked: "${message}". Provide a detailed and informative response.`;
+
         // Handle the response from the API
         const data = await response.json();
-        const assistantMessage = data.content || "I'm sorry, I couldn't come up with a joke right now. Can I help with something else?";
- // Corrected response handling
+        const assistantMessage = data.content || "I'm sorry, can I help with something else?";
+      
+        // Corrected response handling
     
         // Update the assistant's message
         setMessages((messages) => {
@@ -65,6 +67,7 @@ export default function Home() {
           updatedMessages[updatedMessages.length - 1].content = assistantMessage;
           return updatedMessages;
         });
+
       } catch (error) {
         console.error('Error communicating with the API:', error);
         setMessages((messages) => [
