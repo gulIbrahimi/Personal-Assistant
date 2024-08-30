@@ -14,53 +14,62 @@
 
 'use client';
 
-// Import the required modules from the Material-UI library and React library into the Home component
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+// Import the required modules from Material-UI library, React, and Bootstrap
+import { Box, IconButton, Stack, TextField, Typography } from '@mui/material';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
+import './globals.css';
 
 // Export the Home component
 export default function Home() {
   // Define the messages state
   const [messages, setMessages] = useState([
     {
-      // The assistant will be the first to send a message
       role: 'assistant',
-      // The content of the message
-      content: "Hi! I'm you personal assistant. How can I help you today?",
+      content: "Hi! I'm your personal assistant. How can I help you today?",
     },
   ]);
 
   // Define the message state
   const [message, setMessage] = useState('');
 
-    // Function to handle sending a message
-    const sendMessage = async () => {
+  // Function to handle sending a message
+  const sendMessage = async () => {
+    if (message.trim()) {
       setMessage(''); // Clear the input field
-    
+
       // Add the user's message to the chat
       setMessages((messages) => [
         ...messages,
         { role: 'user', content: message },
         { role: 'assistant', content: '' }, // Placeholder for the assistant's response
       ]);
-    
+
       try {
         // Send the message to the API
-        const response = await fetch('/api/gemini', { // Corrected API path
+        const response = await fetch('/api/gemini', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ data: { prompt: `The user asked: "${message}". Provide a detailed and informative response.` } }),
-        });
-        //const prompt = `The user asked: "${message}". Provide a detailed and informative response.`;
+          body: JSON.stringify({
+            data: {
+              prompt: `You are a top-tier personal assistant working for an elite company. The user asked: "${message}". Your response should be:
+            - Professional and conversational, avoiding overly formal or structured language.
+            - Free of excessive bullet points or lists; instead, offer suggestions naturally within the flow of the conversation.
+            - Polished and elegant, with a tone that reflects the high standards of corporate communication.
+            - Personalized and empathetic, understanding the user's needs and responding in a way that feels supportive and intuitive.
+            - Focused on providing clear, concise information without unnecessary embellishments.
 
+            Craft a thoughtful and engaging response that feels natural and supportive, while still being professional and helpful.` 
+          },
+          }),
+        });
         // Handle the response from the API
         const data = await response.json();
         const assistantMessage = data.content || "I'm sorry, can I help with something else?";
-      
-        // Corrected response handling
-    
+
         // Update the assistant's message
         setMessages((messages) => {
           const updatedMessages = [...messages];
@@ -75,13 +84,11 @@ export default function Home() {
           { role: 'assistant', content: "There was an error. Please try again later." },
         ]);
       }
-    };
-    
+    }
+  };
 
-  
-  // Return the chat interface
+  // Return the chat interface with updated styling
   return (
-    // Use the Box component to create a container for the chat interface
     <Box
       width="100vw"
       height="100vh"
@@ -89,35 +96,42 @@ export default function Home() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
-      bgcolor="#f0f4f8"
       p={3}
+      sx={{ backgroundColor: 'var(--background-color)', fontFamily: 'var(--default-font)' }}
     >
       <Stack
-        direction={'column'}
+        direction="column"
         width="100%"
         maxWidth="600px"
         height="80%"
         borderRadius={4}
         boxShadow={3}
         overflow="hidden"
-        bgcolor="white"
+        sx={{ bgcolor: 'var(--surface-color)' }}
       >
         <Box
-          bgcolor="#1976d2"
-          p={2}
-          borderRadius="4px 4px 0 0"
+          p={3}
+          sx={{ 
+            bgcolor: 'var(--accent-color)', 
+            color: 'var(--contrast-color)', 
+            borderRadius: '4px 4px 0 0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
         >
-          <Typography variant="h5" color="white">
-            Chat with Headstarter Assistant
+          <Typography variant="h6" sx={{ fontWeight: 'bold', fontFamily: 'var(--heading-font)' }}>
+            Elite Assistant
           </Typography>
+          <i className="bi bi-person-circle" style={{ fontSize: '1.5rem' }}></i>
         </Box>
 
         <Stack
-          direction={'column'}
+          direction="column"
           spacing={2}
           flexGrow={1}
           p={2}
-          overflow="auto"
+          sx={{ overflowY: 'auto', backgroundColor: 'var(--light-background)' }}
         >
           {messages.map((msg, index) => (
             <Box
@@ -126,12 +140,16 @@ export default function Home() {
               justifyContent={msg.role === 'assistant' ? 'flex-start' : 'flex-end'}
             >
               <Box
-                bgcolor={msg.role === 'assistant' ? '#1976d2' : '#4caf50'}
-                color="white"
-                borderRadius={16}
-                p={2}
-                maxWidth="70%"
-                boxShadow={2}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  maxWidth: '75%',
+                  bgcolor: msg.role === 'assistant' ? 'var(--accent-color)' : '#34A853',
+                  color: 'var(--contrast-color)',
+                  alignSelf: msg.role === 'assistant' ? 'flex-start' : 'flex-end',
+                  fontFamily: 'var(--default-font)',
+                }}
               >
                 {msg.content}
               </Box>
@@ -139,34 +157,38 @@ export default function Home() {
           ))}
         </Stack>
 
-        <Stack direction={'row'} spacing={2} p={2}>
+        <Stack
+          direction="row"
+          spacing={1}
+          p={2}
+          sx={{ bgcolor: 'var(--surface-color)', borderTop: '1px solid #ddd' }}
+        >
           <TextField
-            label="Type a message..."
+            label="Type your message..."
             fullWidth
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             variant="outlined"
-            InputProps={{
-              style: {
-                borderRadius: 20,
+            sx={{
+              bgcolor: '#f1f3f4',
+              borderRadius: 2,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--default-color)',
               },
             }}
-            sx={{ backgroundColor: '#f5f5f5' }}
           />
 
-          <Button
-            variant="contained"
+          <IconButton
+            color="primary"
             onClick={sendMessage}
-            sx={{
-              borderRadius: '20px',
-              bgcolor: '#1976d2',
-              '&:hover': {
-                bgcolor: '#1565c0',
-              },
-            }}
+            disabled={!message.trim()}
+            sx={{ borderRadius: '50%', bgcolor: 'var(--accent-color)', color: 'var(--contrast-color)' }}
           >
-            Send
-          </Button>
+            <i className="bi bi-send"></i>
+          </IconButton>
         </Stack>
       </Stack>
     </Box>
