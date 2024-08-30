@@ -2,8 +2,6 @@
 
 Welcome to the **Elite Assistant Chatbot**—where cutting-edge technology meets elegant design! Dive into a sophisticated chat experience that combines professional communication with a touch of nature's beauty. 🌿
 
-![Elite Assistant Chatbot](https://via.placeholder.com/1200x400?text=Elite+Assistant+Chatbot)
-
 ## 🚀 **Why Elite Assistant Chatbot?**
 
 Imagine a personal assistant that's not only highly skilled but also crafted to make your interactions both seamless and delightful. Whether you're seeking polished support or simply engaging in an insightful conversation, our chatbot is here to deliver.
