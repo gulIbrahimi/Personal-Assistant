@@ -6,7 +6,7 @@
  * The chat interface will display messages from the user and the assistant
  * The user can type a message and send it to the assistant
  * The assistant will respond with a placeholder message after a delay
- * The chat interface will display the messages in a conversation style
+ * The chat interface will display the messages in a convo style format and the user message would be displayed.
  * The user's messages will be displayed on the right side
  * The assistant's messages will be displayed on the left side
  * The chat interface will have a title, message input field, and send button
